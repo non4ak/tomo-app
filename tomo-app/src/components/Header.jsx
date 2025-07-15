@@ -1,6 +1,7 @@
 import { Library } from "lucide-react";
 import Logo from '../assets/logo.png';
 import { Link } from "react-router-dom";
+import ActiveButton from "./ActiveButton";
 
 export default function Header({children}) {
     return (
@@ -17,10 +18,8 @@ export default function Header({children}) {
                         className="max-h-12"
                     />
                 </Link>
-                <button className="button-library">
-                    <Library color="#f29892" className="w-5 h-5" />
-                    <span className="font-medium text-lg">My library</span>
-                </button>
+                <ActiveButton text='My library' Icon={Library} />
+
             </div>
         </header>
     )

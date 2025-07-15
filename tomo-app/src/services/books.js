@@ -1,7 +1,12 @@
+const fetchJson = async (url) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Failed to fetch ${url}`);
+    return res.json();
+};
+
 export const fetchBooks = async () => {
     try {
-        const response = await fetch('http://localhost:3000/books');
-        const resData = await response.json();
+        const resData = await fetchJson('http://localhost:3000/books');
         return resData || [];
     } catch (err) {
         console.log(err);
@@ -21,9 +26,7 @@ export const fetchBookBySubject = async () => {
                 key,
                 edition_key: item.cover_edition_key,
                 title: item.title,
-                coverUrl: item.cover_id
-                    ? `https://covers.openlibrary.org/b/id/${item.cover_id}-M.jpg`
-                    : null,
+                coverUrl: item.cover_id ? `https://covers.openlibrary.org/b/id/${item.cover_id}-M.jpg` : null,
             }
         });
 
@@ -59,33 +62,60 @@ export const searchForBook = async (input) => {
     }
 }
 
+const getLegacyData = async (bookId) => {
+    const url = `https://openlibrary.org/api/books?bibkeys=OLID:${bookId}&format=json&jscmd=data`;
+    const json = await fetchJson(url);
+    return json[`OLID:${bookId}`] || null;
+};
 
-    export const fetchBookData = async (bookId) => {
-        // const url = `https://openlibrary.org/works/${bookId}.json`;
-        const url = `https://openlibrary.org/api/books?bibkeys=OLID:${bookId}&format=json&jscmd=data`;
+const getBookData = async (bookId) => {
+  const url = `https://openlibrary.org/books/${bookId}.json`;
+  return fetchJson(url);
+};
 
-        const response = await fetch(url);
-        const resData = await response.json();
-        
-        const key = `OLID:${bookId}`;
-        const bookData = resData[key];
+const getWorkData = async (workId) => {
+    if (!workId) return null;
+    const url = `https://openlibrary.org${workId}.json`;
+    return fetchJson(url);
+};
 
-        let author = bookData?.authors?.[0]?.name;
+const getEditionsData = async (workId) => {
+  if (!workId) return [];
+  const url = `https://openlibrary.org${workId}/editions.json?limit=5`;
+  const json = await fetchJson(url);
+  return json.entries || [];
+};
 
-        console.log(url);
 
-        // const authorKey = bookData?.authors?.[0]?.name;
-        // if (authorKey) {
-        //     const authorUrl = `https://openlibrary.org${authorKey}.json`;
-        //     const authorResponse = await fetch(authorUrl);
-        //     if (authorResponse.ok) {
-        //         const authorData = await authorResponse.json();
-        //         author = authorData?.personal_name;
-        //     }
-        // }
+export const fetchBookData = async (bookId) => {
+    const [bookData, legacyData] = await Promise.all([getBookData(bookId), getLegacyData(bookId)]);
+
+    const workKey = bookData?.works?.[0]?.key;
+    const [workData, editionsData] = await Promise.all([getWorkData(workKey), getEditionsData(workKey)]);    
+
+    const authorName = legacyData?.authors?.[0]?.name || 'Unknown author';
+    console.log(editionsData);
+
+    const editions = editionsData.map(item => {
+        const isbn = item?.isbn_13?.[0] || item?.isbn_10?.[0] || null;
 
         return {
-            work: bookData,
-            author: author,
-        };
-    }
+            workKey: item?.works?.[0]?.key || null,
+            edition_key: item?.key.split('/').pop(),
+            isbn: isbn,
+            title: item?.title || 'No title',
+            coverUrl: isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-S.jpg` : null,
+        }
+    });
+
+    return {
+        title: bookData?.title || 'No title',
+        authors: authorName,
+        description: workData.description || 'No description available',
+        numberOfPages: bookData?.number_of_pages || null,
+        publishDate: bookData?.publish_date || null,
+        coverIds: bookData?.covers || [],
+        previewUrls: legacyData?.ebooks || [],
+        editions: editions,
+    };
+};

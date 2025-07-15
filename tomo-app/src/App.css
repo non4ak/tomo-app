@@ -50,10 +50,14 @@
     height: 46px;
     gap: 4px;
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-width 0.3s;
 }
 
 .button-library:hover {
     border: 2px solid var(--light-red);
+    background: var(--light-red);
+    color: var(--light-green);
+    /* Вот цвет и для текста, и для иконки */
 }
 
 @media screen and (max-width: 640px) {

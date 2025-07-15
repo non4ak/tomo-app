@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 
-
 export default function BookCard({book, type='small'}) {
     const navigate = useNavigate();
 
