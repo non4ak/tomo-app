@@ -1,5 +1,5 @@
 import { Library } from "lucide-react";
-import Logo from '../assets/logo.png';
+import Logo from '../../assets/logo.png';
 import { Link } from "react-router-dom";
 import ActiveButton from "./ActiveButton";
 

@@ -1,1 +1,98 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import "tailwindcss";
+
+:root {
+    --stone-color: #403d39;
+    --light-blue: #a7cec7;
+    --light-red: #f29892;
+    --text-color: #64958c;
+    --light-green: #fdfefd;
+}
+
+main {
+    @apply w-full mx-auto lg:max-w-[1280px] space-y-10 mt-8;
+}
+
+.image-skeleton {
+    width: 300px;
+    height: 200px;
+    background-color: #ddd;
+    animation: pulse 1.5s infinite;
+}
+
+.bg-light-blue {
+    background-color: var(--light-blue);
+}
+
+.custom-decoration {
+    text-decoration: underline;
+    text-decoration-color: var(--light-red);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 12px;
+}
+
+.color-light-green {
+    color: var(--light-green);
+}
+
+.color-text {
+    color: var(--text-color);
+}
+
+.bg-text {
+    background-color: var(--text-color);
+}
+
+.border-blue {
+    border-color: var(--text-color);
+}
+
+.font-sans {
+    font-family: "DM Sans", sans-serif;
+}
+
+.button-library {
+    border: 1px solid var(--light-red);
+    border-radius: 999px;
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--light-red);
+    height: 46px;
+    gap: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-width 0.3s;
+}
+
+.button-library:hover {
+    border: 2px solid var(--light-red);
+    background: var(--light-red);
+    color: var(--light-green);
+    /* Вот цвет и для текста, и для иконки */
+}
+
+@media screen and (max-width: 640px) {
+    .button-library span {
+        display: none;
+    }
+
+    .button-library {
+        width: 60px;
+    }
+}
+
+.bg-gradient {
+    background: linear-gradient(45deg, #69a69d, #ffffff);
+}
+
+.absolute-custom {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: white;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}

@@ -1,11 +1,10 @@
-import Header from '../components/Header.jsx';
-import Highlights from '../components/Highlights.jsx';
-import HeroSection from '../components/HeroSection.jsx';
-import Browse from '../components/Browse.jsx';
-import SearchInput from '../components/SearchInput.jsx';
-import SearchResults from '../components/SearchResults.jsx';
+import Header from '../components/UI/Header.jsx';
+import Highlights from '../components/MainPage/Highlights.jsx';
+import HeroSection from '../components/MainPage/HeroSection.jsx';
+import Browse from '../components/MainPage/Browse.jsx';
+import SearchInput from '../components/UI/SearchInput.jsx';
+import SearchResults from '../components/MainPage/SearchResults.jsx';
 import { useSearch } from '../hooks/useSearch.js';
-import MainLayout from '../components/MainLayout.jsx';
 
 export default function MainPage() {
     const { searchTerm, setSearchTerm, searchResult, loading, error } = useSearch();
@@ -21,7 +20,7 @@ export default function MainPage() {
                     onSelect={(item) => setSearchTerm(item)}
                 />
             </Header>
-            <MainLayout>
+            <main>
                 {searchTerm && searchResult.length !== 0 ? (
                     <SearchResults results={searchResult} term={searchTerm} />
                 ) : (
@@ -29,7 +28,7 @@ export default function MainPage() {
                 )}
                 <Highlights text='Recently viewed' />
                 <Browse text='Browse by subject' />
-            </MainLayout>
+            </main>
         </>
     )
 }

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import BooksPath from '../assets/books-png.png';
+import BooksPath from '../../assets/books-png.png';
 
 export default memo(function HeroSection() {
     return (

@@ -1,5 +1,5 @@
-import BookCard from './BookCard.jsx';
-import NoCover from '../assets/No-Cover.jpg';
+import BookCard from '../UI/BookCard.jsx';
+import NoCover from '../../assets/No-Cover.jpg';
 
 export default function SearchResults({results, term}) {
 
